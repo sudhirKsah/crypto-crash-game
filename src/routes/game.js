@@ -3,7 +3,13 @@ const router = express.Router();
 const { placeBet, cashout } = require('../services/gameService');
 const { getPlayer, updatePlayerBalance } = require('../models/Player');
 const { fetchCryptoPrice, cryptoToUsd } = require('../services/cryptoService');
-const { validatePlayerId, validateUsdAmount, validateCurrency } = require('../utils/validators');
+const { validatePlayerId, validateUsdAmount } = require('../utils/validators');
+
+function validateCurrency(currency) {
+  if (!currency || !['btc', 'eth'].includes(currency.toLowerCase())) {
+    throw new Error('Currency must be either "btc" or "eth"');
+  }
+}
 
 router.post('/bet', async (req, res) => {
   try {

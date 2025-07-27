@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { validatePlayerId } = require('../utils/validators');
+const { validatePlayerId, validateCurrency } = require('../utils/validators');
 
 const playerSchema = new mongoose.Schema({
   playerId: {
