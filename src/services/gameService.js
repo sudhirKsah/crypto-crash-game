@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto-js');
-const { createGameRound, addBet, addCashout, endRound } = require('../models/GameRound');
+const { createGameRound, addBet, addCashout, endRound, GameRound } = require('../models/GameRound');
 const { createPlayer, getPlayer, updatePlayerBalance } = require('../models/Player');
 const { createTransaction } = require('../models/Transaction');
 const { generateCrashPoint } = require('../utils/provablyFair');

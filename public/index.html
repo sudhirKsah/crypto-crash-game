@@ -1,216 +1,297 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto Crash</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white font-sans">
-  <div class="container mx-auto p-4 max-w-4xl">
-    <h1 class="text-4xl font-bold text-center mb-6 text-blue-400">Crypto Crash</h1>
-    
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
-      <h2 class="text-2xl font-semibold mb-4">Game Status</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <p class="text-gray-400">Current Round</p>
-          <p id="roundId" class="text-xl font-bold">N/A</p>
-        </div>
-        <div>
-          <p class="text-gray-400">Multiplier</p>
-          <p id="multiplier" class="text-xl font-bold">1.00x</p>
-        </div>
-        <div>
-          <p class="text-gray-400">Status</p>
-          <p id="status" class="text-xl font-bold">Waiting...</p>
-        </div>
-      </div>
-    </div>
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Crypto Crash</title>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+     <script src="https://cdn.tailwindcss.com"></script>
+   </head>
+   <body class="bg-gray-900 text-white font-sans">
+     <div class="container mx-auto p-4 max-w-4xl">
+       <h1 class="text-4xl font-bold text-center mb-6 text-blue-400">Crypto Crash</h1>
+       
+       <!-- Game Status -->
+       <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+         <h2 class="text-2xl font-semibold mb-4">Game Status</h2>
+         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+           <div>
+             <p class="text-gray-400">Current Round</p>
+             <p id="roundId" class="text-xl font-bold">N/A</p>
+           </div>
+           <div>
+             <p class="text-gray-400">Multiplier</p>
+             <p id="multiplier" class="text-xl font-bold">1.00x</p>
+           </div>
+           <div>
+             <p class="text-gray-400">Status</p>
+             <p id="status" class="text-xl font-bold">Waiting...</p>
+           </div>
+         </div>
+       </div>
 
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
-      <h2 class="text-2xl font-semibold mb-4">Player Actions</h2>
-      
-      <div class="mb-4">
-        <label for="playerId" class="block text-gray-400 mb-1">Player ID</label>
-        <input
-          id="playerId"
-          type="text"
-          value="player1"
-          class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
-          placeholder="Enter Player ID"
-        >
-      </div>
+       <!-- Player Info and Actions -->
+       <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+         <h2 class="text-2xl font-semibold mb-4">Player Actions</h2>
+         
+         <!-- Player ID Input -->
+         <div class="mb-4">
+           <label for="playerId" class="block text-gray-400 mb-1">Player ID</label>
+           <input
+             id="playerId"
+             type="text"
+             value="player1"
+             class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
+             placeholder="Enter Player ID"
+           >
+         </div>
 
-      <div class="mb-4">
-        <p class="text-gray-400 mb-1">Balance</p>
-        <p id="balanceBtc" class="text-sm">BTC: 0</p>
-        <p id="balanceEth" class="text-sm">ETH: 0</p>
-        <p id="balanceUsd" class="text-sm">USD Equivalent: $0</p>
-      </div>
+         <!-- Balance Display -->
+         <div class="mb-4">
+           <p class="text-gray-400 mb-1">Balance</p>
+           <p id="balanceBtc" class="text-sm">BTC: 0</p>
+           <p id="balanceEth" class="text-sm">ETH: 0</p>
+           <p id="balanceUsd" class="text-sm">USD Equivalent: $0</p>
+         </div>
 
-      <div class="mb-4">
-        <h3 class="text-lg font-semibold mb-2">Place Bet</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="usdAmount" class="block text-gray-400 mb-1">Amount (USD)</label>
-            <input
-              id="usdAmount"
-              type="number"
-              min="1"
-              max="1000000"
-              class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
-              placeholder="Enter USD amount"
-            >
-          </div>
-          <div>
-            <label for="currency" class="block text-gray-400 mb-1">Currency</label>
-            <select
-              id="currency"
-              class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
-            >
-              <option value="btc">BTC</option>
-              <option value="eth">ETH</option>
-            </select>
-          </div>
-        </div>
-        <button
-          onclick="placeBet()"
-          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-        >
-          Place Bet
-        </button>
-      </div>
+         <!-- Deposit Form -->
+         <div class="mb-4">
+           <h3 class="text-lg font-semibold mb-2">Deposit Funds</h3>
+           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <div>
+               <label for="depositAmount" class="block text-gray-400 mb-1">Amount (Crypto)</label>
+               <input
+                 id="depositAmount"
+                 type="number"
+                 min="0.0001"
+                 step="0.0001"
+                 class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
+                 placeholder="Enter crypto amount"
+               >
+             </div>
+             <div>
+               <label for="depositCurrency" class="block text-gray-400 mb-1">Currency</label>
+               <select
+                 id="depositCurrency"
+                 class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
+               >
+                 <option value="btc">BTC</option>
+                 <option value="eth">ETH</option>
+               </select>
+             </div>
+           </div>
+           <button
+             onclick="deposit()"
+             class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
+           >
+             Deposit
+           </button>
+         </div>
 
-      <button
-        onclick="cashout()"
-        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-      >
-        Cash Out
-      </button>
-    </div>
+         <!-- Place Bet Form -->
+         <div class="mb-4">
+           <h3 class="text-lg font-semibold mb-2">Place Bet</h3>
+           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <div>
+               <label for="usdAmount" class="block text-gray-400 mb-1">Amount (USD)</label>
+               <input
+                 id="usdAmount"
+                 type="number"
+                 min="1"
+                 max="1000000"
+                 class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
+                 placeholder="Enter USD amount"
+               >
+             </div>
+             <div>
+               <label for="currency" class="block text-gray-400 mb-1">Currency</label>
+               <select
+                 id="currency"
+                 class="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:border-blue-400"
+               >
+                 <option value="btc">BTC</option>
+                 <option value="eth">ETH</option>
+               </select>
+             </div>
+           </div>
+           <button
+             onclick="placeBet()"
+             class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+           >
+             Place Bet
+           </button>
+         </div>
 
-    <!-- Messages -->
-    <div id="message" class="mt-4 p-4 hidden"></div>
-  </div>
+         <!-- Cash Out Button -->
+         <button
+           onclick="cashout()"
+           class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+         >
+           Cash Out
+         </button>
+       </div>
 
-  <script>
-    const socket = io();
-    const playerIdInput = document.getElementById('playerId');
-    const roundIdSpan = document.getElementById('roundId');
-    const multiplierSpan = document.getElementById('multiplier');
-    const statusSpan = document.getElementById('status');
-    const balanceBtc = document.getElementById('balanceBtc');
-    const balanceEth = document.getElementById('balanceEth');
-    const balanceUsd = document.getElementById('balanceUsd');
-    const usdAmountInput = document.getElementById('usdAmount');
-    const currencySelect = document.getElementById('currency');
-    const messageDiv = document.getElementById('message');
+       <!-- Messages -->
+       <div id="message" class="mt-4 p-4 hidden"></div>
+     </div>
 
-    async function fetchBalance() {
-      const playerId = playerIdInput.value.trim();
-      if (!playerId) {
-        showMessage('Please enter a valid Player ID', 'error');
-        return;
-      }
-      try {
-        const response = await fetch(`/api/game/balance/${playerId}`);
-        const data = await response.json();
-        if (response.ok) {
-          balanceBtc.textContent = `BTC: ${data.btc.toFixed(8)}`;
-          balanceEth.textContent = `ETH: ${data.eth.toFixed(8)}`;
-          balanceUsd.textContent = `USD Equivalent: $${
-            (data.usdEquivalent.btc || 0) + (data.usdEquivalent.eth || 0)
-          .toFixed(2)}`;
-        } else {
-          showMessage(data.error || 'Failed to fetch balance', 'error');
-        }
-      } catch (error) {
-        showMessage('Error fetching balance: ' + error.message, 'error');
-      }
-    }
+     <script>
+       const socket = io();
+       const playerIdInput = document.getElementById('playerId');
+       const roundIdSpan = document.getElementById('roundId');
+       const multiplierSpan = document.getElementById('multiplier');
+       const statusSpan = document.getElementById('status');
+       const balanceBtc = document.getElementById('balanceBtc');
+       const balanceEth = document.getElementById('balanceEth');
+       const balanceUsd = document.getElementById('balanceUsd');
+       const usdAmountInput = document.getElementById('usdAmount');
+       const currencySelect = document.getElementById('currency');
+       const depositAmountInput = document.getElementById('depositAmount');
+       const depositCurrencySelect = document.getElementById('depositCurrency');
+       const messageDiv = document.getElementById('message');
 
-    async function placeBet() {
-      const playerId = playerIdInput.value.trim();
-      const usdAmount = parseFloat(usdAmountInput.value);
-      const currency = currencySelect.value;
+       // Fetch and display player balance
+       async function fetchBalance() {
+         const playerId = playerIdInput.value.trim();
+         if (!playerId) {
+           showMessage('Please enter a valid Player ID', 'error');
+           return;
+         }
+         try {
+           const response = await fetch(`/api/game/balance/${playerId}`);
+           const data = await response.json();
+           if (response.ok) {
+             balanceBtc.textContent = `BTC: ${data.btc.toFixed(8)}`;
+             balanceEth.textContent = `ETH: ${data.eth.toFixed(8)}`;
+             balanceUsd.textContent = `USD Equivalent: $${
+               ((data.usdEquivalent.btc || 0) + (data.usdEquivalent.eth || 0)).toFixed(2)
+             }`;
+           } else {
+             showMessage(data.error || 'Failed to fetch balance', 'error');
+           }
+         } catch (error) {
+           showMessage('Error fetching balance: ' + error.message, 'error');
+         }
+       }
 
-      if (!playerId) {
-        showMessage('Please enter a valid Player ID', 'error');
-        return;
-      }
-      if (isNaN(usdAmount) || usdAmount <= 0 || usdAmount > 1000000) {
-        showMessage('Please enter a valid USD amount (1 - 1,000,000)', 'error');
-        return;
-      }
+       // Deposit funds
+       async function deposit() {
+         const playerId = playerIdInput.value.trim();
+         const cryptoAmount = parseFloat(depositAmountInput.value);
+         const currency = depositCurrencySelect.value;
 
-      try {
-        const response = await fetch('/api/game/bet', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ playerId, usdAmount, currency }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          showMessage(`Bet placed: $${usdAmount} in ${currency.toUpperCase()}`, 'success');
-          fetchBalance();
-        } else {
-          showMessage(data.error || 'Failed to place bet', 'error');
-        }
-      } catch (error) {
-        showMessage('Error placing bet: ' + error.message, 'error');
-      }
-    }
+         if (!playerId) {
+           showMessage('Please enter a valid Player ID', 'error');
+           return;
+         }
+         if (isNaN(cryptoAmount) || cryptoAmount <= 0) {
+           showMessage('Please enter a valid crypto amount (> 0)', 'error');
+           return;
+         }
 
-    function cashout() {
-      const playerId = playerIdInput.value.trim();
-      if (!playerId) {
-        showMessage('Please enter a valid Player ID', 'error');
-        return;
-      }
-      socket.emit('cashout', { playerId });
-    }
+         try {
+           const response = await fetch('/api/game/deposit', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ playerId, cryptoAmount, currency }),
+           });
+           const data = await response.json();
+           if (response.ok) {
+             showMessage(`Deposited ${cryptoAmount} ${currency.toUpperCase()}`, 'success');
+             fetchBalance(); // Update balance after deposit
+           } else {
+             showMessage(data.error || 'Failed to deposit', 'error');
+           }
+         } catch (error) {
+           showMessage('Error depositing funds: ' + error.message, 'error');
+         }
+       }
 
-    function showMessage(message, type) {
-      messageDiv.textContent = message;
-      messageDiv.classList.remove('hidden', 'bg-red-500', 'bg-green-500');
-      messageDiv.classList.add(type === 'error' ? 'bg-red-500' : 'bg-green-500');
-      setTimeout(() => {
-        messageDiv.classList.add('hidden');
-      }, 5000);
-    }
+       // Place a bet via API
+       async function placeBet() {
+         const playerId = playerIdInput.value.trim();
+         const usdAmount = parseFloat(usdAmountInput.value);
+         const currency = currencySelect.value;
 
-    socket.on('roundStart', (data) => {
-      roundIdSpan.textContent = data.roundId;
-      statusSpan.textContent = 'Running';
-      showMessage(`New round ${data.roundId} started`, 'success');
-    });
+         if (!playerId) {
+           showMessage('Please enter a valid Player ID', 'error');
+           return;
+         }
+         if (isNaN(usdAmount) || usdAmount <= 0 || usdAmount > 1000000) {
+           showMessage('Please enter a valid USD amount (1 - 1,000,000)', 'error');
+           return;
+         }
 
-    socket.on('multiplierUpdate', (data) => {
-      multiplierSpan.textContent = data.multiplier.toFixed(2) + 'x';
-    });
+         try {
+           const response = await fetch('/api/game/bet', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ playerId, usdAmount, currency }),
+           });
+           const data = await response.json();
+           if (response.ok) {
+             showMessage(`Bet placed: $${usdAmount} in ${currency.toUpperCase()}`, 'success');
+             fetchBalance(); // Update balance after bet
+           } else {
+             showMessage(data.error || 'Failed to place bet', 'error');
+           }
+         } catch (error) {
+           showMessage('Error placing bet: ' + error.message, 'error');
+         }
+       }
 
-    socket.on('playerCashout', (data) => {
-      showMessage(
-        `Player ${data.playerId} cashed out at ${data.multiplier}x! Payout: $${data.usdPayout.toFixed(2)}`,
-        'success'
-      );
-      fetchBalance();
-    });
+       // Cash out via WebSocket
+       function cashout() {
+         const playerId = playerIdInput.value.trim();
+         if (!playerId) {
+           showMessage('Please enter a valid Player ID', 'error');
+           return;
+         }
+         socket.emit('cashout', { playerId });
+       }
 
-    socket.on('roundCrash', (data) => {
-      statusSpan.textContent = `Crashed at ${data.crashPoint}x`;
-      showMessage(`Round ${data.roundId} crashed at ${data.crashPoint}x`, 'error');
-      fetchBalance();
-    });
+       // Display messages
+       function showMessage(message, type) {
+         messageDiv.textContent = message;
+         messageDiv.classList.remove('hidden', 'bg-red-500', 'bg-green-500');
+         messageDiv.classList.add(type === 'error' ? 'bg-red-500' : 'bg-green-500');
+         setTimeout(() => {
+           messageDiv.classList.add('hidden');
+         }, 5000);
+       }
 
-    socket.on('error', (data) => {
-      showMessage(data.message, 'error');
-    });
+       // WebSocket event listeners
+       socket.on('roundStart', (data) => {
+         roundIdSpan.textContent = data.roundId;
+         statusSpan.textContent = 'Running';
+         showMessage(`New round ${data.roundId} started`, 'success');
+       });
 
-    fetchBalance();
-    setInterval(fetchBalance, 30000);
-  </script>
-</body>
-</html>
+       socket.on('multiplierUpdate', (data) => {
+         multiplierSpan.textContent = data.multiplier.toFixed(2) + 'x';
+       });
+
+       socket.on('playerCashout', (data) => {
+         showMessage(
+           `Player ${data.playerId} cashed out at ${data.multiplier}x! Payout: $${data.usdPayout.toFixed(2)}`,
+           'success'
+         );
+         fetchBalance(); // Update balance after cashout
+       });
+
+       socket.on('roundCrash', (data) => {
+         statusSpan.textContent = `Crashed at ${data.crashPoint}x`;
+         showMessage(`Round ${data.roundId} crashed at ${data.crashPoint}x`, 'error');
+         fetchBalance(); // Update balance after crash
+       });
+
+       socket.on('error', (data) => {
+         showMessage(data.message, 'error');
+       });
+
+       // Initial balance fetch and periodic updates
+       fetchBalance();
+       setInterval(fetchBalance, 30000); // Refresh balance every 30 seconds
+     </script>
+   </body>
+   </html>
