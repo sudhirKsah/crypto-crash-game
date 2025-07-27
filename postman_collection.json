@@ -1,0 +1,83 @@
+{
+    "info": {
+        "name": "Crypto Crash API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Place Bet",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"playerId\":\"player1\",\"usdAmount\":10,\"currency\":\"btc\"}"
+                },
+                "url": {
+                    "raw": "http://localhost:3000/api/game/bet",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "game",
+                        "bet"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Cash Out",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"playerId\":\"player1\"}"
+                },
+                "url": {
+                    "raw": "http://localhost:3000/api/game/cashout",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "game",
+                        "cashout"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Balance",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/api/game/balance/player1",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "game",
+                        "balance",
+                        "player1"
+                    ]
+                }
+            }
+        }
+    ]
+}

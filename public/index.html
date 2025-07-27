@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Crash WebSocket Client</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+</head>
+<body>
+  <h1>Crypto Crash</h1>
+  <p>Player ID: <input id="playerId" value="player1"></p>
+  <p>Current Round: <span id="roundId">N/A</span></p>
+  <p>Multiplier: <span id="multiplier">1.00</span>x</p>
+  <p>Status: <span id="status">Waiting...</span></p>
+  <button onclick="cashout()">Cash Out</button>
+  <script>
+    const socket = io();
+    const playerIdInput = document.getElementById('playerId');
+    const roundIdSpan = document.getElementById('roundId');
+    const multiplierSpan = document.getElementById('multiplier');
+    const statusSpan = document.getElementById('status');
+
+    socket.on('roundStart', (data) => {
+      roundIdSpan.textContent = data.roundId;
+      statusSpan.textContent = 'Running';
+    });
+
+    socket.on('multiplierUpdate', (data) => {
+      multiplierSpan.textContent = data.multiplier.toFixed(2);
+    });
+
+    socket.on('playerCashout', (data) => {
+      alert(`Player ${data.playerId} cashed out at ${data.multiplier}x! Payout: $${data.usdPayout.toFixed(2)}`);
+    });
+
+    socket.on('roundCrash', (data) => {
+      statusSpan.textContent = `Crashed at ${data.crashPoint}x`;
+    });
+
+    socket.on('error', (data) => {
+      alert(`Error: ${data.message}`);
+    });
+
+    function cashout() {
+      const playerId = playerIdInput.value;
+      if (!playerId || playerId.trim().length === 0) {
+        alert('Please enter a valid Player ID');
+        return;
+      }
+      socket.emit('cashout', { playerId });
+    }
+  </script>
+</body>
+</html>

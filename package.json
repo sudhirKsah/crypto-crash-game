@@ -1,0 +1,18 @@
+{
+  "name": "crypto-crash-backend",
+  "version": "1.0.0",
+  "description": "Backend for Crypto Crash game",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "seed": "node src/scripts/seed.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.7.0",
+    "socket.io": "^4.7.5",
+    "crypto-js": "^4.2.0"
+  }
+}
