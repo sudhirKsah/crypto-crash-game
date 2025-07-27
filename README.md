@@ -92,6 +92,16 @@ npm run seed
 
 ## API Endpoints
 
+### POST /api/game/deposit
+- **Request**: `{ playerId: string, currency: "btc" | "eth", cryptoAmount: number }`
+- **Response**: `{ message: "Deposit successful",
+    balance: {
+    btc: number, 
+    eth: number 
+  }
+}`
+- **Description**: Updates the player's balance by adding the specified cryptoAmount to the given currency (BTC or ETH).
+
 ### POST /api/game/bet
 - **Request**: `{ playerId: string, usdAmount: number, currency: "btc" | "eth" }`
 - **Response**: `{ bet: { playerId, usdAmount, cryptoAmount, currency, priceAtTime }, multiplier: number }`
