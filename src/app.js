@@ -4,7 +4,7 @@ const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const gameRoutes = require('./routes/game');
 const { setupWebSocket } = require('./websocket/websocket');
-const { startGameRound } = require('./services/gameService');
+const { startGameRound, initializeRoundId } = require('./services/gameService');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
@@ -16,7 +16,8 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/api/game', gameRoutes);
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  await initializeRoundId();
   setupWebSocket(io);
   startGameRound(io);
 });

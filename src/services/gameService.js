@@ -9,7 +9,12 @@ const { validatePlayerId, validateUsdAmount, validateCurrency } = require('../ut
 
 let currentRound = null;
 let multiplier = 1;
-let roundId = 1;
+let roundId = null;
+
+async function initializeRoundId() {
+  const lastRound = await GameRound.findOne().sort({ roundId: -1 });
+  roundId = lastRound ? lastRound.roundId + 1 : 1;
+}
 
 function startGameRound(io) {
   const seed = Math.random().toString(36).substring(2);
@@ -139,4 +144,4 @@ async function cashout(playerId) {
   }
 }
 
-module.exports = { startGameRound, placeBet, cashout };
+module.exports = { startGameRound, placeBet, cashout, initializeRoundId };
